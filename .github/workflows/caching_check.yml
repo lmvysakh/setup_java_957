@@ -1,0 +1,39 @@
+name: Setup-Java Cache Replication
+
+on:
+  # push:
+  #   branches:
+  #     - main
+  workflow_dispatch:
+
+jobs:
+  maven-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java with cache (Maven)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: maven
+
+      - name: Display cache info (before)
+        run: |
+          echo "List .m2/repository contents BEFORE mvn test:"
+          ls -R ~/.m2/repository || echo "No cache found yet"
+
+      - name: Run tests (will fail)
+        run: |
+          echo "public class FailingTest { public static void main(String[]args){ throw new RuntimeException(\"Failing on purpose for cache test\");} }" > FailingTest.java
+          javac FailingTest.java
+          java FailingTest
+
+      - name: Display cache info (after)
+        if: always()
+        run: |
+          echo "List .m2/repository contents AFTER mvn test:"
+          ls -R ~/.m2/repository || echo "No cache found"
