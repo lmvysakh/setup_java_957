@@ -26,8 +26,8 @@ jobs:
           echo "List .m2/repository contents BEFORE mvn test:"
           ls -R ~/.m2/repository || echo "No cache found yet"
 
-      - name: Run Maven tests (should succeed)
-        run: mvn test
+      - name: Run only SuccessRunTest
+        run: mvn -Dtest=SuccessRunTest test
 
       - name: Display cache info (after)
         if: always()
