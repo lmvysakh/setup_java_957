@@ -1,13 +1,13 @@
-name: Setup-Java Cache Replication
+name: Setup-Java Cache Success Replication
 
 on:
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
-  maven-test-for-failure:
+  maven-test-for-success:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,7 +26,7 @@ jobs:
           echo "List .m2/repository contents BEFORE mvn test:"
           ls -R ~/.m2/repository || echo "No cache found yet"
 
-      - name: Run Maven tests (intentionally fails)
+      - name: Run Maven tests (should succeed)
         run: mvn test
 
       - name: Display cache info (after)
