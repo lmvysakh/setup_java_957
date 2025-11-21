@@ -1,9 +1,9 @@
 name: Setup-Java Cache Replication
 
 on:
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -26,11 +26,8 @@ jobs:
           echo "List .m2/repository contents BEFORE mvn test:"
           ls -R ~/.m2/repository || echo "No cache found yet"
 
-      - name: Run tests (will fail)
-        run: |
-          echo "public class FailingTest { public static void main(String[]args){ throw new RuntimeException(\"Failing on purpose for cache test\");} }" > FailingTest.java
-          javac FailingTest.java
-          java FailingTest
+      - name: Run Maven tests (intentionally fails)
+        run: mvn test
 
       - name: Display cache info (after)
         if: always()
