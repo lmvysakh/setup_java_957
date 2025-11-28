@@ -1,9 +1,9 @@
-name: Setup-Java Cache Replication
+name: Setup-Java Cache Replication - Failure scenario
 
 on:
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -28,6 +28,7 @@ jobs:
 
       - name: Run Maven tests (intentionally fails)
         run: mvn test
+        continue-on-error: true
 
       - name: Display cache info (after)
         if: always()
