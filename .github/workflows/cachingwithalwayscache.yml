@@ -1,0 +1,53 @@
+name: Setup-Java Cache Replication - Failure scenario - Always cache
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  maven-test-for-failure:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Restore cache explicitly so we can always save later (even on failure)
+      - name: Restore Maven cache
+        id: maven-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Set up Java (Temurin 17)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Display cache info (before)
+        run: |
+          echo "List .m2/repository contents BEFORE mvn test:"
+          ls -R ~/.m2/repository || echo "No cache found yet"
+
+      - name: Run Maven tests (intentionally fails)
+        run: mvn test
+
+      - name: Display cache info (after)
+        if: always()
+        run: |
+          echo "List .m2/repository contents AFTER mvn test:"
+          ls -R ~/.m2/repository || echo "No cache found"
+
+      # Always save cache, even if previous steps failed
+      - name: Save Maven cache (always)
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ steps.maven-cache.outputs.cache-primary-key }}
