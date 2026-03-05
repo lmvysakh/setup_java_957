@@ -1,0 +1,34 @@
+name: "Reproduce File Exists – setup-java"
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1st setup-java call: restores Maven cache (miss on 1st run, hit on 2nd run)
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      # Populate the Maven local repo so there's something to restore next time
+      - name: Download dependencies
+        run: mvn dependency:resolve --batch-mode
+
+      # 2nd setup-java call: triggers the issue
+      # - 1st workflow run: cache miss → seeds the cache
+      # - 2nd workflow run: cache HIT → potential tar "Cannot open: File exists"
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
