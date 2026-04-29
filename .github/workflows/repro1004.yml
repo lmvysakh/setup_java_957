@@ -1,0 +1,15 @@
+name: Reproduce JetBrains JDK 25 Bug
+on: 
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Java 25 with JetBrains
+        uses: actions/setup-java@v5
+        with:
+          distribution: jetbrains
+          java-version: '25'
