@@ -5,21 +5,11 @@ on:
   workflow_dispatch:
 
 jobs:
- reproduce:
+  reproduce:
     runs-on: ubuntu-latest
     steps:
-      # Exhaust unauthenticated GitHub API rate limit
-      - name: Burn rate limit
-        run: |
-          for i in $(seq 1 65); do
-            curl -s -o /dev/null -w "%{http_code}\n" \
-              "https://api.github.com/repos/JetBrains/JetBrainsRuntime/releases?per_page=1&page=$i"
-          done
-          echo "Remaining rate limit:"
-          curl -s https://api.github.com/rate_limit | jq '.rate'
-
       - name: Setup Java 25 with JetBrains
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: jetbrains
           java-version: '25'
