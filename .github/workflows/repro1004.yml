@@ -6,12 +6,7 @@ on:
 
 jobs:
   reproduce:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
-
+    runs-on: ubuntu-latest
     steps:
       - name: Setup Java 25 with JetBrains
         uses: actions/setup-java@v5
