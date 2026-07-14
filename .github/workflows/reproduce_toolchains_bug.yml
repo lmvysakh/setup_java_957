@@ -16,6 +16,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '11'
+          overwrite-settings: false
 
       - name: Show toolchains after JDK 11
         run: |
@@ -31,6 +32,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+          overwrite-settings: false
 
       - name: Show toolchains after JDK 17
         run: |
@@ -47,6 +49,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+          overwrite-settings: false
 
       - name: Show toolchains after JDK 21
         run: |
