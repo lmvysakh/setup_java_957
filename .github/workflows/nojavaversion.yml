@@ -1,0 +1,25 @@
+name: Test setup-java with no version
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Java (no version, distribution only)
+        id: setup-java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+        continue-on-error: true
+
+      - name: Check outcome
+        run: |
+          echo "Outcome: ${{ steps.setup-java.outcome }}"
+          java -version || echo "No java configured by action"
