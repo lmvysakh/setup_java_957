@@ -17,7 +17,6 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-        continue-on-error: true
 
       - name: Check outcome
         run: |
